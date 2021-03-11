@@ -1,7 +1,7 @@
 # Settlement
 A open swap for aggregator
 
-## Settlement interface
+## Settlement interface function
 ```
 interface ISettlement {
     function getListedTokens() external view returns (ERC20[] memory tokens);
@@ -142,9 +142,9 @@ function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate
 
 ---
 
+# How to aggregate settlement
 
-
-## 1, contact us to let your caller contract be added into whitelist of Settlement contract
+## 1, contact us to add your caller contract into whitelist of Settlement contract
 
 ## 2, get all the support tokens by function getTokenList: 
     function getListedTokens() external view returns (ERC20[] memory tokens);
