@@ -7,13 +7,26 @@ interface ISettlement {
     function getListedTokens() external view returns (ERC20[] memory tokens);
     function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
     function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
-    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external onlyCounterparty lock returns (uint destAmount);
-    function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory)
-    function getFeedRate(ERC20 token, bool buy) external view returns (uint)；
+    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+    function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction);
+    function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate)；
 }
 ```
 
+```
+contract LibRates {
+        // bps - basic rate steps. one step is 1 / 10000 of the rate.
+    struct StepFunction {
+        int[] x; // quantity for each step. Quantity of each step includes previous steps.
+        int[] y; // rate change per quantity step  in bps.
+    }
+```
+
+---
+
+
 ## getListedTokens
+
 function getListedTokens() external view returns (ERC20[] memory tokens)
 
 **Parameters**
@@ -24,9 +37,12 @@ none
 
 `tokens`  the supported tokes arraylist
 
+---
+
 
 ## quote
-function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount);
+
+function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount)
 
 **Parameters**
 
@@ -40,9 +56,91 @@ function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 block
 
 **Returns**
 
+`destAmount`  Amount of Destination token  
+
+---
+
+
+## swapTokens
+
+function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount)
+
+**Parameters**
+
+`srcToken` Src token 
+
+`destToken` Destination token  
+
+`srcAmount` Amount of src token 
+
+`to` swap token to the Destination address
+
+**Returns**
+
 `destAmount`  Amount of Destination token 
 
+---
+
+
+## swapTokensWithTrust
+
+function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount)
+
+**Parameters**
+
+`srcToken` Src token 
+
+`destToken` Destination token  
+
+`srcAmount` Amount of src token 
+
+`destAmountMin` required min Amount of Destination token 
+
+`to` swap token to the Destination address
+
+**Returns**
+
+`destAmount`  Amount of Destination token 
+
+
+---
+
+## getRateQtyStepFunction
+
+function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction)
+
+**Parameters**
+
+`tradeToken` Trade token 
+
+`isBuy`  To buy the trade token or not 
+
+`srcAmount` Amount of src token 
+
+**Returns**
+
+`stepFunction` basic rate steps. one step is 1 / 10000 of the rate.  for detail please refer to the struct StepFunction in contract LibRates above
+
+
+---
+
     
+# getFeedRate
+
+function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate)；
+
+**Parameters**
+
+`token`  token 
+
+`isBuy`  buyFeedRate or not 
+
+**Returns**
+
+`feedRate` The origin feedRate
+
+
+---
 
 
 
