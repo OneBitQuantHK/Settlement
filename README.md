@@ -44,9 +44,9 @@ none
 
 
 ## quote
+**Quote the amount **
 
 function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount)
-
 
 **Parameters**
 
@@ -66,6 +66,7 @@ function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 block
 
 
 ## swapTokens
+**Execute a ERC20 token -> ERC20 token trade.**
 
 function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount)
 
@@ -81,7 +82,7 @@ function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to)
 
 **Returns**
 
-`destAmount`  Amount of Destination token 
+`destAmount`   Amount of actual destination tokens 
 
 ---
 
@@ -104,7 +105,7 @@ function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, ui
 
 **Returns**
 
-`destAmount`  Amount of Destination token 
+`destAmount`  Amount of actual destination tokens 
 
 
 ---
