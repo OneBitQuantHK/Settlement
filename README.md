@@ -11,6 +11,7 @@ interface ISettlement {
     function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction);
     function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate);
     function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota);
+    function tradeFeeBps() external view returns(unit feeBps);
 }
 ```
 
@@ -28,7 +29,7 @@ contract LibRates {
 
 
 ## getListedTokens
-**Get all the support tokens list** 
+Get all the support tokens list
 
 ```
 function getListedTokens() external view returns (ERC20[] memory tokens)
@@ -46,7 +47,7 @@ none
 
 
 ## quote
-**Quote the destination token amount with the src token amount**
+Quote the destination token amount with the src token amount
 
 ```
 function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount)
@@ -121,7 +122,7 @@ function test_swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint d
 ---
 
 ## swapTokensWithTrust
-**Execute a ERC20 token -> ERC20 token trade, on condition the caller must approve Settlement**
+Execute a ERC20 token -> ERC20 token trade, on condition the caller must approve Settlement
 
 ```
 function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount)
@@ -160,6 +161,7 @@ function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, ui
 ---
 
 ## getRateQtyStepFunction
+Get feed rate steps
 
 ```
 function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction)
@@ -175,7 +177,7 @@ function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view retu
 
 **Returns**
 
-`stepFunction` basic rate steps. one step is 1 / 10000 of the rate.  for detail please refer to the struct StepFunction in contract LibRates above
+`stepFunction`  feed rate steps. one step is 1 / 10000 of the rate.  for detail please refer to the struct StepFunction in contract LibRates above
 
 
 ---
@@ -219,16 +221,32 @@ function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uin
 
 ---
 
+## tradeFeeBps
+Get the trade fee bps in Settlement contract,  1 is 1/10000 trade amount fee 
+
+```
+function tradeFeeBps() external view returns(unit feeBps)
+```
+
+**Parameters**
+
+None
+
+**Returns**
+
+`feeBps` the trade fee bps, 1 bps => 1/10000
+
+
+---
+
 
 ## How to aggregate settlement
 
 1. Contact us to add your caller contract into whitelist of Settlement contract
-2. Get all the support tokens by function **getTokenList**
+2. Get all the support tokens by function **getListedTokens**
 3. Quote destination token amount by function **quote**  
 4. Trade:
     - swap tokens by function **swapTokens** if you trust the Settlement contract
     - swap tokens by function **swapTokensWithTrust** if you do not trust the Settlement contract
 
 
-    
-    
