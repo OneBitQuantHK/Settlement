@@ -4,11 +4,47 @@ A open swap for aggregator
 ## Settlement interface
 ```
 interface ISettlement {
-    function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
-    function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
     function getListedTokens() external view returns (ERC20[] memory tokens);
+    function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
+    function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
+    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external onlyCounterparty lock returns (uint destAmount);
+    function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory)
+    function getFeedRate(ERC20 token, bool buy) external view returns (uint)；
 }
 ```
+
+## getListedTokens
+function getListedTokens() external view returns (ERC20[] memory tokens)
+
+**Parameters**
+
+none
+
+**Returns**
+
+`tokens`  the supported tokes arraylist
+
+
+## quote
+function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount);
+
+**Parameters**
+
+`srcToken` Src token 
+
+`destToken` Destination token  
+
+`srcAmount` Amount of src token 
+
+`blockNumber` current blockNumber 
+
+**Returns**
+
+`destAmount`  Amount of Destination token 
+
+    
+
+
 
 ## 1, contact us to let your caller contract be added into whitelist of Settlement contract
 
@@ -21,38 +57,38 @@ interface ISettlement {
 
 
 ## 4, swapTokens: you have no need to approve settlement contract
-    function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
+function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
 
-    before swapTokens : 
-    quote the destAmont and require the quote destAmount is bigger than or equal to destAmountMin;
-    transfer the token into the settlement contract;
-    check the destToken balance of to address; 
-    
-    execute swapTokens
-    
-    after swapTokens: 
-    you should check the destToken balance of to address and substract balance before swapTokens, 
-    require the balance difference value is bigger than or equal to destAmountMin.
+before swapTokens : 
+quote the destAmont and require the quote destAmount is bigger than or equal to destAmountMin;
+transfer the token into the settlement contract;
+check the destToken balance of to address; 
 
-    sample:
-    ```
-    function test_swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) 
-        external returns (uint destAmount) {
-            
-        uint quoteAmountOut = settlement.quote(srcToken,destToken,srcAmount,block.number);
-        require(quoteAmountOut >= destAmountMin, "quote amount out is not enough");
+execute swapTokens
+
+after swapTokens: 
+you should check the destToken balance of to address and substract balance before swapTokens, 
+require the balance difference value is bigger than or equal to destAmountMin.
+
+**sample:**
+```
+function test_swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) 
+    external returns (uint destAmount) {
         
-        uint balanceBeforeSwap = srcToken.balanceOf(to);
-        TransferHelper.safeTransferFrom(address(srcToken), msg.sender, address(settlement), srcAmount);
-        
-        uint swapAmountOut = settlement.swapTokens(srcToken,destToken,srcAmount,to);
-        uint balanceAfterSwap = srcToken.balanceOf(to);
-        uint actualAmountOut = balanceAfterSwap - balanceBeforeSwap;
-        require(actualAmountOut >= destAmountMin, "actual amout out is not enough");
-        
-        return actualAmountOut;
-    }
-    ```
+    uint quoteAmountOut = settlement.quote(srcToken,destToken,srcAmount,block.number);
+    require(quoteAmountOut >= destAmountMin, "quote amount out is not enough");
+    
+    uint balanceBeforeSwap = srcToken.balanceOf(to);
+    TransferHelper.safeTransferFrom(address(srcToken), msg.sender, address(settlement), srcAmount);
+    
+    uint swapAmountOut = settlement.swapTokens(srcToken,destToken,srcAmount,to);
+    uint balanceAfterSwap = srcToken.balanceOf(to);
+    uint actualAmountOut = balanceAfterSwap - balanceBeforeSwap;
+    require(actualAmountOut >= destAmountMin, "actual amout out is not enough");
+    
+    return actualAmountOut;
+}
+```
 
 ## 5, swapTokensWithTrust: you must approve settlement contract
     function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount); 
