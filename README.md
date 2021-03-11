@@ -1,7 +1,7 @@
 # Settlement
 A open swap for aggregator
 
-# Settlement interface
+## Settlement interface
 ```
 interface ISettlement {
     function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
@@ -10,17 +10,17 @@ interface ISettlement {
 }
 ```
 
-# 1, contact us to let your caller contract be added into whitelist of Settlement contract
+## 1, contact us to let your caller contract be added into whitelist of Settlement contract
 
-# 2, get all the support tokens by function getTokenList: 
+## 2, get all the support tokens by function getTokenList: 
     function getListedTokens() external view returns (ERC20[] memory tokens);
 
-# 3, quote: quote destToken amount  
+## 3, quote: quote destToken amount  
 ### param: blockNumber should be current blockNumber      
     function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external 
 
 
-# 4, swapTokens: you have no need to approve settlement contract
+## 4, swapTokens: you have no need to approve settlement contract
     function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
 
     before swapTokens : 
@@ -54,7 +54,7 @@ interface ISettlement {
     }
     ```
 
-# 5, swapTokensWithTrust: you must approve settlement contract
+## 5, swapTokensWithTrust: you must approve settlement contract
     function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount); 
     
     sample:
