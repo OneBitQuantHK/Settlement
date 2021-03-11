@@ -100,22 +100,32 @@ contract OneSwap is PermissionGroups{
     }
     
     // if you do not trust settlement contract, you have no need to approve 
-    function test_swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount) {
-        uint quoteAmountOut = settlement.quote(srcToken,destToken,srcAmount,block.number);
-        require(quoteAmountOut >= destAmountMin, "quote amount out is not enough");
+    function test_swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) 
+    external returns (uint destAmount) {
         
-        uint balanceBeforeSwap = srcToken.balanceOf(to);
-        TransferHelper.safeTransferFrom(address(srcToken), msg.sender, address(settlement), srcAmount);
-        
-        uint swapAmountOut = settlement.swapTokens(srcToken,destToken,srcAmount,to);
-        uint balanceAfterSwap = srcToken.balanceOf(to);
-        uint actualAmountOut = balanceAfterSwap - balanceBeforeSwap;
-        require(actualAmountOut >= destAmountMin, "actual amout out is not enough");
-        
-        return actualAmountOut;
-    }
+    // quote the destAmont 
+    uint quoteAmountOut = settlement.quote(srcToken,destToken,srcAmount,block.number);
 
-    // if you trust settlement contract
+    // require the quote destAmount is bigger than or equal to destAmountMin
+    require(quoteAmountOut >= destAmountMin, "quote amount out is not enough");
+    
+    // record the destToken balance of of to address before swapTokens
+    uint balanceBeforeSwap = srcToken.balanceOf(to);
+    TransferHelper.safeTransferFrom(address(srcToken), msg.sender, address(settlement), srcAmount);
+    
+    uint swapAmountOut = settlement.swapTokens(srcToken,destToken,srcAmount,to);
+
+    // query the destToken balance of to address and substract balance before swapTokens, 
+    uint balanceAfterSwap = srcToken.balanceOf(to);
+    uint actualAmountOut = balanceAfterSwap - balanceBeforeSwap;
+
+    // require the balance difference value is bigger than or equal to destAmountMin.
+    require(actualAmountOut >= destAmountMin, "actual amout out is not enough");
+    
+    return actualAmountOut;
+}
+
+    // if you trust Settlemnt contract, you have to approve Settlemnt Contract 
     function test_swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) 
         external returns (uint destAmount){
 
