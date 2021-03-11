@@ -28,10 +28,9 @@ contract LibRates {
 
 
 ## getListedTokens
-Get all the support tokens list 
+**Get all the support tokens list** 
 
-
-**function getListedTokens() external view returns (ERC20[] memory tokens)**
+function getListedTokens() external view returns (ERC20[] memory tokens)
 
 **Parameters**
 
