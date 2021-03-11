@@ -9,7 +9,7 @@ interface ISettlement {
     function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
     function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
     function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction);
-    function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate)；
+    function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate);
 }
 ```
 
@@ -20,6 +20,7 @@ contract LibRates {
         int[] x; // quantity for each step. Quantity of each step includes previous steps.
         int[] y; // rate change per quantity step  in bps.
     }
+}
 ```
 
 ---

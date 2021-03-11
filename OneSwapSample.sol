@@ -1,4 +1,5 @@
 pragma solidity 0.6.6;
+pragma experimental ABIEncoderV2;
 
 interface ERC20 {
     function transferFrom(address _from, address _to, uint _value) external returns (bool);
@@ -9,9 +10,20 @@ interface ERC20 {
 }
 
 interface ISettlement {
+    function getListedTokens() external view returns (ERC20[] memory tokens);
     function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
     function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
-    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount) 
+    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+    function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction);
+    function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate);
+}
+
+contract LibRates {
+        // bps - basic rate steps. one step is 1 / 10000 of the rate.
+    struct StepFunction {
+        int[] x; // quantity for each step. Quantity of each step includes previous steps.
+        int[] y; // rate change per quantity step  in bps.
+    }
 }
 
 interface IOneSwap {
@@ -92,7 +104,7 @@ contract OneSwap is PermissionGroups{
         require(quoteAmountOut >= destAmountMin, "quote amount out is not enough");
         
         uint balanceBeforeSwap = srcToken.balanceOf(to);
-        TransferHelper.safeTransferFrom(srcToken, msg.sender, address(settlement), srcAmount);
+        TransferHelper.safeTransferFrom(address(srcToken), msg.sender, address(settlement), srcAmount);
         
         uint swapAmountOut = settlement.swapTokens(srcToken,destToken,srcAmount,to);
         uint balanceAfterSwap = srcToken.balanceOf(to);
@@ -107,7 +119,7 @@ contract OneSwap is PermissionGroups{
         external returns (uint destAmount){
 
         if(srcToken.allowance(address(this), address(settlement)) < srcAmount) {
-            TransferHelper.safeApprove(srcToken, address(settlement), MAX_UINT);
+            TransferHelper.safeApprove(address(srcToken), address(settlement), MAX_UINT);
         } 
         uint swapAmountOut = settlement.swapTokensWithTrust(srcToken, destToken, srcAmount, destAmountMin, to);
         return swapAmountOut;
