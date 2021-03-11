@@ -10,6 +10,7 @@ interface ISettlement {
     function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
     function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction);
     function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate);
+    function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota);
 }
 ```
 
@@ -28,7 +29,8 @@ contract LibRates {
 
 ## getListedTokens
 
-function getListedTokens() external view returns (ERC20[] memory tokens)
+### function getListedTokens() external view returns (ERC20[] memory tokens)
+Get all the support tokens list 
 
 **Parameters**
 
@@ -44,6 +46,7 @@ none
 ## quote
 
 function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount)
+
 
 **Parameters**
 
@@ -125,10 +128,9 @@ function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view retu
 
 ---
 
-    
 # getFeedRate
 
-function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate)；
+function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate)
 
 **Parameters**
 
@@ -142,6 +144,24 @@ function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate
 
 
 ---
+
+# getQuota
+
+function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota)
+
+**Parameters**
+
+`tradeToken`  Trade Token 
+
+`isDestToken`  Whether tradeToken is the Destation token 
+
+**Returns**
+
+`quota` The quota that Settlement can trade 
+
+
+---
+
 
 # How to aggregate settlement
 

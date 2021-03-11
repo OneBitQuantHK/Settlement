@@ -16,6 +16,7 @@ interface ISettlement {
     function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
     function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction);
     function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate);
+    function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota);
 }
 
 contract LibRates {
