@@ -70,7 +70,7 @@ function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 block
 
 
 ## swapTokens
-**Execute a ERC20 token -> ERC20 token trade, on condition the caller must transfer amount of the src token to Settlement contract before call it, and require the balance difference value between after call and before call, please refer to sample for detail**
+Execute a ERC20 token -> ERC20 token trade, on condition the caller must transfer amount of the src token to Settlement contract before call it, and require the balance difference value between after call and before call, please refer to sample for detail
 
 ```
 function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount)
