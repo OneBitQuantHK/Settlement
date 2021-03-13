@@ -8,20 +8,8 @@ interface ISettlement {
     function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
     function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
     function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
-    function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction);
-    function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate);
     function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota);
     function tradeFeeBps() external view returns(unit feeBps);
-}
-```
-
-```
-contract LibRates {
-        // bps - basic rate steps. one step is 1 / 10000 of the rate.
-    struct StepFunction {
-        int[] x; // quantity for each step. Quantity of each step includes previous steps.
-        int[] y; // rate change per quantity step  in bps.
-    }
 }
 ```
 
@@ -156,48 +144,6 @@ function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, ui
     return swapAmountOut;
 }
 ```
-
-
----
-
-## getRateQtyStepFunction
-Get feed rate steps
-
-```
-function getRateQtyStepFunction(ERC20 tradeToken, bool isBuy) external view returns (LibRates.StepFunction memory stepFunction)
-```
-
-**Parameters**
-
-`tradeToken` Trade token 
-
-`isBuy`  To buy the trade token or not 
-
-`srcAmount` Amount of src token 
-
-**Returns**
-
-`stepFunction`  feed rate steps. one step is 1 / 10000 of the rate.  for detail please refer to the struct StepFunction in contract LibRates above
-
-
----
-
-## getFeedRate
-**To obtain the origin feed buy or sell rate of a token.**
-
-```
-function getFeedRate(ERC20 token, bool buy) external view returns (uint feedRate)
-```
-
-**Parameters**
-
-`token`  token 
-
-`isBuy`  buyFeedRate or not 
-
-**Returns**
-
-`feedRate` The origin feedRate
 
 
 ---
