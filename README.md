@@ -1,6 +1,9 @@
 # Settlement
 A open swap for aggregator
 
+## Settlement contract address 
+mainnet: 0xd89865EAe829c5960D92F4597060271119511972
+
 ## Settlement interface function
 ```
 interface ISettlement {
