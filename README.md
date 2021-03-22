@@ -276,7 +276,7 @@ None
 2. Get all the support tokens by function **getListedTokens**
 3. Quote destination token amount by function **quote**  
 4. Trade:
-    - swap tokens by function **swapTokens** if you do not trust the Settlement contract
-    - swap tokens by function **swapTokensWithTrust** if you trust the Settlement contract
+    - swap tokens by function **swapTokens/swapETHForToken/swapTokenForETH** if you do not trust the Settlement contract
+    - swap tokens by function **swapTokensWithTrust/swapTokenForETHWithTrust** if you trust the Settlement contract
 
 
