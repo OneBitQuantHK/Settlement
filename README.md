@@ -9,10 +9,14 @@ mainnet: 0xd89865EAe829c5960D92F4597060271119511972
 interface ISettlement {
     function getListedTokens() external view returns (ERC20[] memory tokens);
     function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
-    function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
-    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
     function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota);
     function tradeFeeBps() external view returns(unit feeBps);
+    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+    function swapTokenForETHWithTrust(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+    function swapETHForToken(ERC20 destToken, uint destAmountMin, address to) external returns (uint destAmount);  
+    function swapTokenForETH(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external  returns (uint destAmount);
+    function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+
 }
 ```
 
@@ -58,6 +62,8 @@ function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 block
 
 `destAmount`  Amount of Destination token  
 
+    function swapTokenForETH(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external  returns (uint destAmount);
+
 ---
 
 
@@ -65,7 +71,7 @@ function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 block
 Execute a ERC20 token -> ERC20 token trade, on condition the caller must transfer amount of the src token to Settlement contract before call it, and require the balance difference value between after call and before call, please refer to sample for detail
 
 ```
-function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount)
+function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount)
 ```
 
 **Parameters**
@@ -75,6 +81,8 @@ function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to)
 `destToken` Destination token  
 
 `srcAmount` Amount of src token 
+
+`destAmountMin` required min Amount of Destination token 
 
 `to` swap token to the Destination address
 
@@ -109,6 +117,55 @@ function test_swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint d
     return actualAmountOut;
 }
 ```
+
+
+---
+
+## swapTokenForETH
+Execute a ERC20 token -> ETH trade, on condition the caller must transfer amount of the src token to Settlement contract before call it, and require the balance difference value between after call and before call
+
+```
+function swapTokenForETH(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external  returns (uint destAmount);
+```
+
+**Parameters**
+
+`srcToken` Src token 
+
+`srcAmount` Amount of src token 
+
+`destAmountMin` required min Amount of Destination token 
+
+`to` swap token to the Destination address
+
+**Returns**
+
+`destAmount`   Amount of actual destination tokens 
+
+
+---
+
+## swapETHForToken
+Execute a ETH -> ERC20 token trade, on condition the caller must transfer amount of the ETH to Settlement contract before call it, and require the balance difference value between after call and before call
+
+```
+function swapETHForToken(ERC20 destToken, uint destAmountMin, address to) external  returns (uint destAmount);
+```
+
+**Parameters**
+
+`srcToken` Src token 
+
+`srcAmount` Amount of src token 
+
+`destAmountMin` required min Amount of Destination token 
+
+`to` swap token to the Destination address
+
+**Returns**
+
+`destAmount`   Amount of actual destination tokens 
+
 
 ---
 
@@ -147,6 +204,30 @@ function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, ui
     return swapAmountOut;
 }
 ```
+
+
+---
+
+## swapTokenForETHWithTrust
+Execute a ERC20 token -> ETH trade, on condition the caller must approve Settlement
+
+```
+function swapTokenForETHWithTrust(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+```
+
+**Parameters**
+
+`srcToken` Src token 
+
+`srcAmount` Amount of src token 
+
+`destAmountMin` required min Amount of Destination token 
+
+`to` swap token to the Destination address
+
+**Returns**
+
+`destAmount`  Amount of actual destination tokens 
 
 
 ---

@@ -12,9 +12,13 @@ interface ERC20 {
 interface ISettlement {
     function getListedTokens() external view returns (ERC20[] memory tokens);
     function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
-    function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, address to) external returns (uint destAmount);
-    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
     function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota);
+    function tradeFeeBps() external view returns(unit feeBps);
+    function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+    function swapTokenForETHWithTrust(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
+    function swapETHForToken(ERC20 destToken, uint destAmountMin, address to) external returns (uint destAmount);  
+    function swapTokenForETH(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external  returns (uint destAmount);
+    function swapTokens(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
 }
 
 contract LibRates {
@@ -111,7 +115,7 @@ contract OneSwap is PermissionGroups{
     uint balanceBeforeSwap = srcToken.balanceOf(to);
     TransferHelper.safeTransferFrom(address(srcToken), msg.sender, address(settlement), srcAmount);
     
-    uint swapAmountOut = settlement.swapTokens(srcToken,destToken,srcAmount,to);
+    uint swapAmountOut = settlement.swapTokens(srcToken,destToken,srcAmount,destAmountMin,to);
 
     // query the destToken balance of to address and substract balance before swapTokens, 
     uint balanceAfterSwap = srcToken.balanceOf(to);
