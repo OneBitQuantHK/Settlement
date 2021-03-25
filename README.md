@@ -154,9 +154,7 @@ function swapETHForToken(ERC20 destToken, uint destAmountMin, address to) extern
 
 **Parameters**
 
-`srcToken` Src token 
-
-`srcAmount` Amount of src token 
+`destToken` dest token 
 
 `destAmountMin` required min Amount of Destination token 
 
