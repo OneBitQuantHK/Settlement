@@ -62,7 +62,6 @@ function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 block
 
 `destAmount`  Amount of Destination token  
 
-    function swapTokenForETH(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external  returns (uint destAmount);
 
 ---
 
