@@ -1,16 +1,15 @@
-# Settlement
-A open swap for aggregator
+# on-chain liquidity provider
+on-chain liquidity provider for aggregator
 
-## Settlement contract address 
-mainnet: 0x39D085e13D7876ca3311f0aFFB42778799d24F09
+## contract address 
+Settlement mainnet: 0x5F5207dF64B0F7Ed56BF0b61733d3BE8795f4e5A
+Onebit Router mainnet: 0x8949218FDBd449128861e04cAF59224bc563477f
 
 ## Settlement interface function
 ```
 interface ISettlement {
     function getListedTokens() external view returns (ERC20[] memory tokens);
     function quote(ERC20 srcToken, ERC20 destToken, uint256 srcAmount, uint256 blockNumber) external view returns (uint destAmount); 
-    function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota);
-    function tradeFeeBps() external view returns(unit feeBps);
     function swapTokensWithTrust(ERC20 srcToken, ERC20 destToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
     function swapTokenForETHWithTrust(ERC20 srcToken, uint srcAmount, uint destAmountMin, address to) external returns (uint destAmount);
     function swapETHForToken(ERC20 destToken, uint destAmountMin, address to) external returns (uint destAmount);  
@@ -225,43 +224,6 @@ function swapTokenForETHWithTrust(ERC20 srcToken, uint srcAmount, uint destAmoun
 **Returns**
 
 `destAmount`  Amount of actual destination tokens 
-
-
----
-
-## getQuota
-
-```
-function getQuota(ERC20 tradeToken, bool isDestToken) external view returns (uint quota)
-```
-
-**Parameters**
-
-`tradeToken`  Trade Token 
-
-`isDestToken`  Whether tradeToken is the Destation token 
-
-**Returns**
-
-`quota` The quota that Settlement can trade 
-
-
----
-
-## tradeFeeBps
-Get the trade fee bps in Settlement contract,  1 is 1/10000 trade amount fee 
-
-```
-function tradeFeeBps() external view returns(unit feeBps)
-```
-
-**Parameters**
-
-None
-
-**Returns**
-
-`feeBps` the trade fee bps, 1 bps => 1/10000
 
 
 ---
