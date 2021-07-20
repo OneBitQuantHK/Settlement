@@ -2,8 +2,8 @@
 on-chain liquidity provider for aggregator
 
 ## contract address 
-Settlement mainnet: 0x5F5207dF64B0F7Ed56BF0b61733d3BE8795f4e5A
-Onebit Router mainnet: 0x8949218FDBd449128861e04cAF59224bc563477f
+* Settlement mainnet: 0x5F5207dF64B0F7Ed56BF0b61733d3BE8795f4e5A
+* Onebit Router mainnet: 0x8949218FDBd449128861e04cAF59224bc563477f
 
 ## Settlement interface function
 ```
